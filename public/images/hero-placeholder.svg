@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="800" viewBox="0 0 1920 800" role="img" aria-label="Pemandangan sawah dan bukit Candi Wetan">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dff4ff"/>
+      <stop offset="40%" stop-color="#edf8db"/>
+      <stop offset="100%" stop-color="#f1f1e8"/>
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#90b28a"/>
+      <stop offset="100%" stop-color="#5b7d5d"/>
+    </linearGradient>
+    <linearGradient id="hillFront" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#799f64"/>
+      <stop offset="100%" stop-color="#3a6d47"/>
+    </linearGradient>
+    <linearGradient id="rice" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dceaa8"/>
+      <stop offset="100%" stop-color="#a8c65f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="800" fill="url(#sky)"/>
+  <circle cx="1700" cy="120" r="72" fill="#f7df92" opacity="0.9"/>
+
+  <path d="M0 330 L260 230 L430 260 L630 160 L850 270 L1040 200 L1220 260 L1420 150 L1700 280 L1920 210 L1920 560 L0 560 Z" fill="url(#hillBack)" opacity="0.9"/>
+  <path d="M0 430 L240 360 L420 390 L620 300 L860 420 L1080 330 L1280 430 L1520 340 L1920 450 L1920 680 L0 680 Z" fill="#6d986a" opacity="0.92"/>
+  <path d="M0 510 L260 480 L530 540 L760 470 L1040 560 L1310 500 L1630 560 L1920 520 L1920 800 L0 800 Z" fill="url(#hillFront)"/>
+
+  <g opacity="0.92">
+    <path d="M0 620 L1920 620 L1920 800 L0 800 Z" fill="#7aa451"/>
+    <path d="M0 650 L1920 650" stroke="#dfe8b5" stroke-width="3" opacity="0.4"/>
+    <path d="M0 680 L1920 680" stroke="#dfe8b5" stroke-width="3" opacity="0.35"/>
+    <path d="M0 710 L1920 710" stroke="#dfe8b5" stroke-width="3" opacity="0.3"/>
+  </g>
+
+  <g stroke="#d7e786" stroke-width="4" stroke-linecap="round" opacity="0.8">
+    <path d="M120 610 L140 520"/>
+    <path d="M150 620 L170 520"/>
+    <path d="M182 620 L200 510"/>
+    <path d="M220 620 L240 530"/>
+    <path d="M260 620 L268 518"/>
+    <path d="M300 620 L315 530"/>
+    <path d="M430 610 L448 515"/>
+    <path d="M468 620 L486 525"/>
+    <path d="M590 620 L605 520"/>
+    <path d="M628 620 L645 528"/>
+    <path d="M760 620 L778 510"/>
+    <path d="M800 620 L822 515"/>
+    <path d="M1000 620 L1020 515"/>
+    <path d="M1038 620 L1058 525"/>
+    <path d="M1270 620 L1288 520"/>
+    <path d="M1312 620 L1335 528"/>
+    <path d="M1480 620 L1498 510"/>
+    <path d="M1518 620 L1544 520"/>
+    <path d="M1680 620 L1700 520"/>
+    <path d="M1720 620 L1740 530"/>
+  </g>
+
+  <path d="M0 620 C220 650, 310 710, 470 670 C660 625, 810 720, 980 670 C1160 620, 1310 720, 1500 678 C1660 642, 1780 670, 1920 700 L1920 800 L0 800 Z" fill="url(#rice)" opacity="0.7"/>
+
+  <g fill="rgba(255,255,255,0.24)">
+    <rect x="110" y="105" width="540" height="210" rx="26"/>
+  </g>
+  <g fill="#14532D" font-family="Arial, sans-serif">
+    <text x="150" y="175" font-size="42" font-weight="700">Candi Wetan</text>
+    <text x="150" y="225" font-size="22">Sawah hijau di antara bukit</text>
+  </g>
+</svg>

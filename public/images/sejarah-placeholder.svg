@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="Pemandangan sawah dan bukit Candi Wetan">
+  <defs>
+    <linearGradient id="sky2" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dbf3ff"/>
+      <stop offset="52%" stop-color="#eef8d8"/>
+      <stop offset="100%" stop-color="#f9f7ef"/>
+    </linearGradient>
+    <linearGradient id="hillBack2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#9ab887"/>
+      <stop offset="100%" stop-color="#597d5a"/>
+    </linearGradient>
+    <linearGradient id="rice2" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dfeea7"/>
+      <stop offset="100%" stop-color="#a0c95e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#sky2)"/>
+  <circle cx="1020" cy="110" r="58" fill="#f7df9b" opacity="0.9"/>
+
+  <path d="M0 250 L170 180 L330 220 L480 150 L640 245 L820 170 L955 235 L1200 190 L1200 420 L0 420 Z" fill="url(#hillBack2)" opacity="0.92"/>
+  <path d="M0 350 L170 300 L300 330 L470 270 L660 355 L850 290 L1010 335 L1200 310 L1200 500 L0 500 Z" fill="#6f9c6d"/>
+  <path d="M0 450 L150 425 L290 470 L470 440 L640 490 L820 455 L1010 500 L1200 470 L1200 700 L0 700 Z" fill="#4d7a4a" opacity="0.96"/>
+
+  <g opacity="0.86" stroke="#dfe8b3" stroke-width="3" stroke-linecap="round">
+    <path d="M70 560 L88 470"/>
+    <path d="M110 560 L128 470"/>
+    <path d="M190 560 L205 470"/>
+    <path d="M230 560 L245 475"/>
+    <path d="M310 560 L325 470"/>
+    <path d="M348 560 L363 475"/>
+    <path d="M500 560 L516 470"/>
+    <path d="M540 560 L556 472"/>
+    <path d="M690 560 L705 470"/>
+    <path d="M730 560 L747 474"/>
+    <path d="M890 560 L905 472"/>
+    <path d="M930 560 L946 476"/>
+  </g>
+
+  <path d="M0 520 C140 545, 250 600, 370 570 C500 540, 630 620, 780 585 C880 560, 1010 635, 1200 605 L1200 700 L0 700 Z" fill="url(#rice2)" opacity="0.75"/>
+
+  <g fill="rgba(255,255,255,0.28)">
+    <rect x="82" y="80" width="360" height="146" rx="22"/>
+  </g>
+  <g fill="#14532D" font-family="Arial, sans-serif">
+    <text x="110" y="140" font-size="28" font-weight="700">Candi Wetan</text>
+    <text x="110" y="175" font-size="19">Sawah, bukit, dan kesejukan pedesaan</text>
+  </g>
+</svg>
