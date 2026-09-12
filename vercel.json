@@ -1,44 +1,16 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "functions": {
-        "api/index.php": {
-            "runtime": "vercel-php@0.9.0",
-            "includeFiles": [
-                "app/**",
-                "bootstrap/**",
-                "config/**",
-                "database/data/dataset_candi_wetan_2026.csv",
-                "resources/views/**",
-                "routes/**",
-                "storage/framework/**",
-                "vendor/**"
-            ]
-        }
-    },
-    "rewrites": [
-        {
-            "source": "/css/:path*",
-            "destination": "/public/css/:path*"
-        },
-        {
-            "source": "/js/:path*",
-            "destination": "/public/js/:path*"
-        },
-        {
-            "source": "/images/:path*",
-            "destination": "/public/images/:path*"
-        },
-        {
-            "source": "/favicon.ico",
-            "destination": "/public/favicon.ico"
-        },
-        {
-            "source": "/robots.txt",
-            "destination": "/public/robots.txt"
-        },
-        {
-            "source": "/:path*",
-            "destination": "/api/index.php"
-        }
-    ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "functions": {
+    "api/*.php": {
+      "runtime": "vercel-php@0.9.0"
+    }
+  },
+
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ]
 }
