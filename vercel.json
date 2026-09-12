@@ -1,6 +1,5 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
-    "buildCommand": "npm run build && node patch-vercel-php.cjs",
     "functions": {
         "api/index.php": {
             "runtime": "vercel-php@0.8.0"
