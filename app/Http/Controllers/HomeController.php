@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StatistikKependudukan;
+use App\Services\StatistikKependudukanService;
 use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
@@ -10,21 +10,47 @@ class HomeController extends Controller
     /**
      * Halaman Beranda / Home
      */
-    public function index()
+    public function index(StatistikKependudukanService $statistikService)
     {
         try {
-            $genderRows = StatistikKependudukan::where('kategori', 'Jenis Kelamin');
-            $totalPenduduk = $genderRows->sum('jumlah');
-            $lakiLaki = (clone $genderRows)
-                ->whereIn('subkategori', ['L', 'Laki-laki'])
-                ->sum('jumlah');
-            $perempuan = (clone $genderRows)
-                ->whereIn('subkategori', ['P', 'Perempuan'])
-                ->sum('jumlah');
+            // Ambil semua data statistik dari CSV
+            $rows = $statistikService->all();
 
-            $jumlahKK = StatistikKependudukan::where('kategori', 'Kepala Keluarga')
-                ->where('subkategori', 'Jumlah KK')
-                ->sum('jumlah');
+            // Total penduduk berdasarkan Jenis Kelamin
+            $genderRows = $rows->where('kategori', 'Jenis Kelamin');
+
+            $totalPenduduk = $genderRows->sum(function ($row) {
+                return (int) $row->jumlah;
+            });
+
+            // Jumlah laki-laki
+            $lakiLaki = $genderRows
+                ->filter(function ($row) {
+                    return in_array($row->subkategori, ['L', 'Laki-laki']);
+                })
+                ->sum(function ($row) {
+                    return (int) $row->jumlah;
+                });
+
+            // Jumlah perempuan
+            $perempuan = $genderRows
+                ->filter(function ($row) {
+                    return in_array($row->subkategori, ['P', 'Perempuan']);
+                })
+                ->sum(function ($row) {
+                    return (int) $row->jumlah;
+                });
+
+            // Jumlah KK
+            $jumlahKK = $rows
+                ->filter(function ($row) {
+                    return $row->kategori === 'Kepala Keluarga'
+                        && $row->subkategori === 'Jumlah KK';
+                })
+                ->sum(function ($row) {
+                    return (int) $row->jumlah;
+                });
+
         } catch (\Throwable $e) {
             $totalPenduduk = 0;
             $lakiLaki = 0;
@@ -32,9 +58,16 @@ class HomeController extends Controller
             $jumlahKK = 0;
         }
 
+        // Ambil maksimal 6 gambar untuk halaman beranda
         $galleryImages = array_slice($this->galleryImages(), 0, 6);
 
-        return view('home', compact('totalPenduduk', 'lakiLaki', 'perempuan', 'jumlahKK', 'galleryImages'));
+        return view('home', compact(
+            'totalPenduduk',
+            'lakiLaki',
+            'perempuan',
+            'jumlahKK',
+            'galleryImages'
+        ));
     }
 
     /**
@@ -79,23 +112,35 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * Mengambil gambar dari folder public/images/galeri
+     */
     private function galleryImages(): array
     {
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
         return collect(File::files(public_path('images/galeri')))
             ->filter(function ($file) use ($allowedExtensions) {
-                return in_array(strtolower($file->getExtension()), $allowedExtensions, true);
+                return in_array(
+                    strtolower($file->getExtension()),
+                    $allowedExtensions,
+                    true
+                );
             })
             ->sortBy(function ($file) {
                 return strtolower($file->getFilename());
             })
             ->map(function ($file) {
-                $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+                $name = pathinfo(
+                    $file->getFilename(),
+                    PATHINFO_FILENAME
+                );
 
                 return [
                     'file' => $file->getFilename(),
-                    'alt' => ucwords(str_replace(['-', '_'], ' ', $name)),
+                    'alt' => ucwords(
+                        str_replace(['-', '_'], ' ', $name)
+                    ),
                 ];
             })
             ->values()

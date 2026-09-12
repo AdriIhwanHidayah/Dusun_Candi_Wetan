@@ -3,43 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use App\Models\StatistikKependudukan;
+use App\Services\StatistikKependudukanService;
 
 class StatistikKependudukanController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, StatistikKependudukanService $statistikService)
     {
         try {
             $selectedCategories = array_values(array_filter(
                 (array) $request->input('kategori', []),
                 fn ($category) => is_string($category) && $category !== ''
             ));
+            $rows = $statistikService->all();
 
-            $query = $this->filteredQuery($request, $selectedCategories);
-
-            $data = $query->orderBy('dusun')
-                ->orderBy('kategori')
-                ->get();
+            $data = $this->filteredRows(
+                $rows,
+                $request,
+                $selectedCategories
+            );
 
             $summary = [
-                'total_penduduk' => (clone $query)->where('kategori', 'Jenis Kelamin')->sum('jumlah'),
-                'jenis_kelamin' => $this->countDistinctSubcategories($query, 'Jenis Kelamin'),
-                'keagamaan' => $this->countDistinctSubcategories($query, 'Keagamaan'),
-                'pekerjaan' => $this->countDistinctSubcategories($query, 'Pekerjaan'),
-                'pendidikan' => $this->countDistinctSubcategories($query, 'Pendidikan'),
-                'kepala_keluarga' => (clone $query)->where('kategori', 'Kepala Keluarga')->sum('jumlah'),
+                'total_penduduk' => $this->sumCategory($data, 'Jenis Kelamin'),
+                'jenis_kelamin' => $this->countDistinctSubcategories($data, 'Jenis Kelamin'),
+                'keagamaan' => $this->countDistinctSubcategories($data, 'Keagamaan'),
+                'pekerjaan' => $this->countDistinctSubcategories($data, 'Pekerjaan'),
+                'pendidikan' => $this->countDistinctSubcategories($data, 'Pendidikan'),
+                'kepala_keluarga' => $this->sumCategory($data, 'Kepala Keluarga'),
             ];
 
             $options = [];
 
             foreach (['dusun', 'rw', 'rt', 'tahun', 'kategori'] as $column) {
-                $options[$column] = StatistikKependudukan::query()
-                    ->whereNotNull($column)
-                    ->where($column, '!=', '')
-                    ->distinct()
-                    ->orderBy($column)
-                    ->pluck($column);
+                $options[$column] = $rows
+                    ->pluck($column)
+                    ->filter(fn ($value) => $value !== null && $value !== '')
+                    ->unique()
+                    ->sort()
+                    ->values();
             }
         } catch (\Throwable $e) {
             $data = collect();
@@ -58,29 +60,44 @@ class StatistikKependudukanController extends Controller
         return view('statistik-kependudukan.index', compact('data', 'options', 'selectedCategories', 'summary'));
     }
 
-    private function filteredQuery(Request $request, array $selectedCategories): Builder
+    private function filteredRows(Collection $rows, Request $request, array $selectedCategories): Collection
     {
-        $query = StatistikKependudukan::query();
-
-        foreach (['dusun', 'rw', 'rt', 'tahun'] as $filter) {
-            if ($request->filled($filter)) {
-                $query->where($filter, $request->input($filter));
+        $filtered = $rows->filter(function ($row) use ($request) {
+            foreach (['dusun', 'rw', 'rt', 'tahun'] as $filter) {
+                if ($request->filled($filter) && (string) $row->{$filter} !== (string) $request->input($filter)) {
+                    return false;
+                }
             }
-        }
+
+            return true;
+        });
 
         if ($selectedCategories !== []) {
-            $query->whereIn('kategori', $selectedCategories);
+            $filtered = $filtered->whereIn('kategori', $selectedCategories);
         }
 
-        return $query;
+        return $filtered
+            ->sortBy([
+                ['dusun', 'asc'],
+                ['kategori', 'asc'],
+            ])
+            ->values();
     }
 
-    private function countDistinctSubcategories(Builder $query, string $category): int
+    private function sumCategory(Collection $rows, string $category): int
     {
-        return (int) (clone $query)
+        return (int) $rows
             ->where('kategori', $category)
-            ->selectRaw('COUNT(DISTINCT subkategori) as total')
-            ->value('total');
+            ->sum(fn ($row) => (int) $row->jumlah);
+    }
+
+    private function countDistinctSubcategories(Collection $rows, string $category): int
+    {
+        return $rows
+            ->where('kategori', $category)
+            ->pluck('subkategori')
+            ->unique()
+            ->count();
     }
 
     public function create()
